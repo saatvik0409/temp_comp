@@ -10,7 +10,7 @@ Query: Find all work items assigned to me and summarize them.
         "arguments": [
             {
                 "argument_name": "owned_by",
-                "argument_value": ["$$PREV[0]"],
+                "argument_value": ["$$PREV[0]"]
             }
         ]
     },
@@ -111,7 +111,7 @@ Query: Get all tickets assigned to me, prioritize them, and summarize them.
         "arguments": [
             {
                 "argument_name": "objects",
-                "argument_value": "$$PREV[1]"
+                "argument_value": "$$PREV[2]"
             }
         ]
     }
@@ -124,8 +124,8 @@ Query: Find all high-severity issues created by Alice and add them to my sprint.
         "tool_name": "works_list",
         "arguments": [
             {
-                "argument_name": "issue.priority",
-                "argument_value": ["p0"]
+                "argument_name": "ticket.severity",
+                "argument_value": ["high"]
             },
             {
                 "argument_name": "created_by",
@@ -176,7 +176,7 @@ Query: Retrieve the latest work items assigned to me, find similar ones, and sum
             },
             {
                 "argument_name": "limit",
-                "argument_value": 1
+                "argument_value": 10
             }
         ]
     },
@@ -185,7 +185,7 @@ Query: Retrieve the latest work items assigned to me, find similar ones, and sum
         "arguments": [
             {
                 "argument_name": "work_id",
-                "argument_value": "$$PREV[1]"
+                "argument_value": "$$PREV[1][0].id"
             }
         ]
     },
@@ -230,7 +230,7 @@ Query: Extract tasks from the note 'Complete testing and fix bugs', prioritize t
         "arguments": [
             {
                 "argument_name": "work_ids",
-                "argument_value": "$$PREV[0]"
+                "argument_value": "$$PREV[1]"
             },
             {
                 "argument_name": "sprint_id",
@@ -274,7 +274,7 @@ Query: Find all unresolved tickets needing a response, prioritize them, and add 
         "arguments": [
             {
                 "argument_name": "work_ids",
-                "argument_value": "$$PREV[0]"
+                "argument_value": "$$PREV[1]"
             },
             {
                 "argument_name": "sprint_id",
@@ -288,18 +288,18 @@ Query: Search for tasks related to 'UI redesign', prioritize them, and summarize
 
 [
     {
-        "tool_name": "get_similar_work_items",
+        "tool_name": "works_list",
         "arguments": [
             {
-                "argument_name": "work_id",
-                "argument_value": "UI redesign"
+                "argument_name": "type",
+                "argument_value": ["task"]
+            },
+            {
+                "argument_name": "applies_to_part",
+                "argument_value": ["UI redesign"]
             }
         ]
     },
-    
-    
-    
-    
     {
         "tool_name": "prioritize_objects",
         "arguments": [
@@ -314,7 +314,7 @@ Query: Search for tasks related to 'UI redesign', prioritize them, and summarize
         "arguments": [
             {
                 "argument_name": "objects",
-                "argument_value": "$$PREV[0]"
+                "argument_value": "$$PREV[1]"
             }
         ]
     }
@@ -350,7 +350,7 @@ Query: Get all issues from Rev org XYZ, sort them by priority, and summarize the
         "arguments": [
             {
                 "argument_name": "objects",
-                "argument_value": "$$PREV[1]"
+                "argument_value": "$$PREV[0]"
             }
         ]
     }
@@ -426,7 +426,7 @@ Query: Get all blocker tickets, prioritize them, and add them to the sprint.
         "arguments": [
             {
                 "argument_name": "work_ids",
-                "argument_value": "$$PREV[0]"
+                "argument_value": "$$PREV[1]"
             },
             {
                 "argument_name": "sprint_id",
@@ -439,10 +439,10 @@ Query: Get all blocker tickets, prioritize them, and add them to the sprint.
 Query: Find my assigned issues, identify similar ones, and prioritize them.
 
 [
-    {
-        "tool_name": "who_am_i",
-        "arguments": []
-    },
+    
+    
+    
+    
     {
         "tool_name": "works_list",
         "arguments": [
@@ -497,7 +497,7 @@ Query: Retrieve all tasks in the 'In Progress' stage, find similar ones, and sum
         "arguments": [
             {
                 "argument_name": "work_id",
-                "argument_value": "$$PREV[0][0]"
+                "argument_value": "$$PREV[0]"
             }
         ]
     },
@@ -515,16 +515,16 @@ Query: Retrieve all tasks in the 'In Progress' stage, find similar ones, and sum
 Query: List my work items, group them by priority, and add the highest priority ones to my sprint.
 
 [
-    {
-        "tool_name": "who_am_i",
-        "arguments": []
-    },
+
+
+
+
     {
         "tool_name": "works_list",
         "arguments": [
             {
                 "argument_name": "owned_by",
-                "argument_value": ["$$PREV{0}"]  
+                "argument_value": ["user_id"]  
             }
         ]
     },
@@ -546,7 +546,7 @@ Query: List my work items, group them by priority, and add the highest priority 
         "arguments": [
             {
                 "argument_name": "work_ids",
-                "argument_value": "$$PREV[0]"
+                "argument_value": "$$PREV[1]"
             },
             {
                 "argument_name": "sprint_id",
@@ -558,11 +558,11 @@ Query: List my work items, group them by priority, and add the highest priority 
 
 Query: Get my latest task, summarize it, and use this summary to create actionable tasks. Add these tasks to sprint.
 
-[   
-    {
-        "tool_name": "who_am_i",
-        "arguments": []
-    },
+[
+
+
+
+
     {
         "tool_name": "works_list",
         "arguments": [
@@ -624,30 +624,30 @@ Query: Find me the sprint ID of alice and bob
 Query: Get the latest item from the sprint, and summarize it.
 
 [
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    {
+        "tool_name": "get_sprint_id",
+        "arguments": []
+    },
+    {
+        "tool_name": "works_list",
+        "arguments": [
+            {
+                "argument_name": "limit",
+                "argument_value": 1
+            },
+            {
+                "argument_name": "type",
+                "argument_value": ["issue", "ticket", "task"]
+            }
+        ]
+    },
+    {
+        "tool_name": "summarize_objects",
+        "arguments": [
+            {
+                "argument_name": "objects",
+                "argument_value": "$$PREV[1]"
+            }
+        ]
+    }
 ]
